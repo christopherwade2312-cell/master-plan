@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christopher Wade — Master Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0d1b2e;--navy2:#132238;--navy3:#1a2e47;
+  --navy-rule:rgba(255,255,255,0.07);--navy-rule2:rgba(255,255,255,0.14);
+  --gold:#b8935a;--gold-light:#f0e4cf;--gold-dark:#8a6030;
+  --green:#1a6b4a;--green-light:#d4ede3;
+  --red:#c0392b;--red-light:#fde8e6;
+  --amber:#b45309;--amber-light:#fef3c7;
+  --blue:#1e40af;--blue-light:#dbeafe;
+  --purple:#5b21b6;--purple-light:#ede9fe;
+  --teal:#0f766e;--teal-light:#ccfbf1;
+  --paper:#f5f3ee;--paper2:#ede9e2;
+  --ink:#0e0f13;--muted:#7a7568;
+  --serif:'Instrument Serif',Georgia,serif;
+  --sans:'Geist',sans-serif;
+  --mono:'Geist Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--navy);color:var(--paper);font-size:14px;line-height:1.6;overflow-x:hidden}
+
+/* ── NAV ── */
+.top-nav{padding:14px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--navy-rule);position:sticky;top:0;z-index:200;background:rgba(13,27,46,0.97);backdrop-filter:blur(12px)}
+.logo{font-family:var(--serif);font-size:20px;color:var(--paper)}
+.logo span{color:var(--gold)}
+.nav-meta{font-size:11px;color:rgba(245,243,238,0.3);font-family:var(--mono)}
+.nav-roles{display:flex;gap:6px;flex-wrap:wrap}
+.role-pill{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;border:1px solid var(--navy-rule2);color:rgba(245,243,238,0.5);cursor:default;letter-spacing:.2px}
+
+/* ── HERO ── */
+.hero{padding:48px 32px 36px;border-bottom:1px solid var(--navy-rule);background:linear-gradient(180deg,var(--navy2) 0%,var(--navy) 100%)}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.hero-title{font-family:var(--serif);font-size:clamp(32px,3.5vw,52px);line-height:1.1;letter-spacing:-1.5px;margin-bottom:12px}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:14px;color:rgba(245,243,238,0.45);max-width:640px;line-height:1.7;margin-bottom:28px}
+
+/* ── STATS ── */
+.stats-bar{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--navy-rule)}
+.stat-cell{padding:16px 20px;border-right:1px solid var(--navy-rule)}
+.stat-cell:last-child{border-right:none}
+.stat-val{font-family:var(--serif);font-size:36px;letter-spacing:-1.5px;line-height:1;margin-bottom:3px}
+.stat-lbl{font-size:10px;color:rgba(245,243,238,0.35);text-transform:uppercase;letter-spacing:1px}
+
+/* ── PHASE TABS ── */
+.phase-nav{display:flex;border-bottom:1px solid var(--navy-rule);overflow-x:auto;padding:0 32px;background:var(--navy2);position:sticky;top:49px;z-index:100}
+.ptab{padding:13px 18px;font-size:12px;font-weight:500;color:rgba(245,243,238,0.4);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;user-select:none}
+.ptab:hover{color:rgba(245,243,238,0.7)}
+.ptab.active{color:var(--paper);border-bottom-color:var(--gold)}
+
+/* ── LAYOUT ── */
+.main-wrap{display:grid;grid-template-columns:1fr 300px;min-height:80vh}
+.swim-panel{padding:28px 32px;overflow-y:auto}
+.sidebar{padding:20px;background:var(--navy2);border-left:1px solid var(--navy-rule);overflow-y:auto;position:sticky;top:90px;height:calc(100vh - 90px)}
+.phase-view{display:none}
+.phase-view.active{display:block}
+
+/* ── GATE BANNER ── */
+.gate-banner{margin-bottom:20px;border-radius:12px;overflow:hidden;border:1px solid rgba(184,147,90,0.3)}
+.gate-head{background:rgba(184,147,90,0.12);padding:12px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.gate-diamond{width:28px;height:28px;background:var(--gold);transform:rotate(45deg);display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:3px}
+.gate-diamond span{transform:rotate(-45deg);font-size:11px;font-weight:700;color:var(--navy)}
+.gate-title{font-size:13px;font-weight:600;color:var(--gold);flex:1}
+.gate-status-badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.3px}
+.gate-body{display:none;padding:14px 18px;background:rgba(184,147,90,0.05);border-top:1px solid rgba(184,147,90,0.15)}
+.gate-body.open{display:block}
+.gate-criteria{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.gate-crit{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border-radius:6px;font-size:12px;color:rgba(245,243,238,0.7);cursor:pointer;border:1px solid transparent;transition:border-color 0.15s}
+.gate-crit:hover{border-color:rgba(184,147,90,0.3)}
+.gate-crit.passed{opacity:0.5}
+.gate-crit.passed .gcb{background:var(--green);border-color:var(--green)}
+.gate-crit.passed .gcb::after{content:'';display:block;width:8px;height:5px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translateY(-1px)}
+.gcb{width:16px;height:16px;border-radius:4px;border:1.5px solid rgba(255,255,255,0.2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center}
+.gate-note{font-size:11px;color:rgba(245,243,238,0.4);font-style:italic}
+
+/* ── SWIM LANE ── */
+.swim-lane{margin-bottom:12px;border:1px solid var(--navy-rule2);border-radius:10px;overflow:hidden}
+.lane-head{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;user-select:none;transition:background 0.15s}
+.lane-head:hover{background:rgba(255,255,255,0.03)}
+.lane-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.lane-name{font-size:12px;font-weight:600;color:var(--paper);flex:1;letter-spacing:.2px}
+.lane-role{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:500;border:1px solid var(--navy-rule2);color:rgba(245,243,238,0.4)}
+.lane-prog{font-size:10px;font-family:var(--mono);color:rgba(245,243,238,0.3);margin-right:4px}
+.lane-chev{font-size:9px;color:rgba(245,243,238,0.25);transition:transform 0.2s}
+.lane-chev.open{transform:rotate(90deg)}
+.lane-body{display:none;padding:0 0 8px}
+.lane-body.open{display:block}
+.lane-prog-bar{height:2px;background:rgba(255,255,255,0.05);margin:0 16px 10px}
+.lane-prog-fill{height:100%;border-radius:1px;transition:width 0.4s}
+
+/* ── TASKS ── */
+.task-row{display:flex;align-items:flex-start;gap:10px;padding:9px 16px;cursor:pointer;transition:background 0.1s;border-left:2px solid transparent}
+.task-row:hover{background:rgba(255,255,255,0.025)}
+.task-row.t-now{border-left-color:#f87171}
+.task-row.t-active{border-left-color:var(--gold)}
+.task-row.t-done{opacity:0.38}
+.task-row.t-done .task-title{text-decoration:line-through}
+.task-row.t-blocked{border-left-color:var(--red);background:rgba(192,57,43,0.05)}
+.tcb{width:17px;height:17px;border-radius:4px;border:1.5px solid rgba(255,255,255,0.18);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.tcb:hover{border-color:var(--gold)}
+.tcb.ticked{background:var(--green);border-color:var(--green)}
+.tcb.ticked::after{content:'';display:block;width:8px;height:5px;border-left:2px solid white;border-bottom:2px solid white;transform:rotate(-45deg) translateY(-1px)}
+.task-body{flex:1;min-width:0}
+.task-title{font-size:12px;font-weight:500;color:var(--paper);margin-bottom:2px;line-height:1.4}
+.task-sub{font-size:11px;color:rgba(245,243,238,0.4);line-height:1.5}
+.task-foot{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;align-items:center}
+.tbadge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;letter-spacing:.2px}
+.tb-now{background:rgba(239,68,68,0.2);color:#fca5a5}
+.tb-week{background:rgba(245,158,11,0.2);color:#fcd34d}
+.tb-month{background:rgba(59,130,246,0.2);color:#93c5fd}
+.tb-later{background:rgba(255,255,255,0.06);color:rgba(245,243,238,0.35)}
+.tb-done{background:rgba(26,107,74,0.2);color:#6ee7b7}
+.t-owner{font-size:10px;color:rgba(245,243,238,0.22);font-family:var(--mono)}
+
+/* ── SIDEBAR ── */
+.sb-section{margin-bottom:20px}
+.sb-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(245,243,238,0.25);margin-bottom:10px}
+.role-card{padding:10px 12px;border-radius:8px;border:1px solid var(--navy-rule);margin-bottom:6px;background:rgba(255,255,255,0.02)}
+.role-card-title{font-size:12px;font-weight:500;color:var(--paper);margin-bottom:2px}
+.role-card-sub{font-size:10px;color:rgba(245,243,238,0.35);line-height:1.4}
+.cert-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;background:rgba(255,255,255,0.02);border:1px solid var(--navy-rule);margin-bottom:5px}
+.cert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cert-name{font-size:11px;color:rgba(245,243,238,0.7);flex:1;line-height:1.3}
+.cert-date{font-size:10px;color:rgba(245,243,238,0.25);font-family:var(--mono)}
+.product-row{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:6px;border:1px solid var(--navy-rule);margin-bottom:4px}
+.prod-name{font-size:11px;font-weight:500;color:var(--paper)}
+.prod-price{font-size:10px;color:var(--gold);font-family:var(--mono)}
+.prod-status{font-size:9px;font-weight:600;padding:1px 6px;border-radius:4px}
+.ps-built{background:rgba(26,107,74,0.25);color:#6ee7b7}
+.ps-next{background:rgba(245,158,11,0.2);color:#fcd34d}
+.ps-later{background:rgba(255,255,255,0.06);color:rgba(245,243,238,0.3)}
+.acc-rule{display:flex;gap:8px;align-items:flex-start;padding:7px 10px;border-radius:7px;background:rgba(255,255,255,0.02);border:1px solid var(--navy-rule);margin-bottom:5px}
+.acc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.acc-text{font-size:11px;color:rgba(245,243,238,0.6);line-height:1.4}
+.rev-box{padding:12px 14px;border-radius:8px;margin-bottom:8px}
+.rev-val{font-family:var(--serif);font-size:26px;letter-spacing:-1px;margin-bottom:2px}
+.rev-lbl{font-size:10px;color:rgba(245,243,238,0.35)}
+
+@media(max-width:900px){.main-wrap{grid-template-columns:1fr}.sidebar{display:none}.stats-bar{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="logo">Christopher Wade &mdash; <span>Master Plan</span></div>
+  <div class="nav-roles">
+    <span class="role-pill">&#127775; Agent</span>
+    <span class="role-pill">&#128218; Coach</span>
+    <span class="role-pill">&#127775; Mentor</span>
+    <span class="role-pill">&#127828; Designer</span>
+    <span class="role-pill">&#128196; PM</span>
+    <span class="role-pill">&#128187; Developer</span>
+    <span class="role-pill">&#128176; CFO</span>
+    <span class="role-pill">&#128227; CMO</span>
+    <span class="role-pill">&#9878; Legal</span>
+    <span class="role-pill">&#128269; Research</span>
+  </div>
+  <div class="nav-meta">Updated April 2026</div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">From zero to commercial</div>
+  <div class="hero-title">The complete plan.<br><em>Every lane. Every gate.</em></div>
+  <div class="hero-sub">12 swim lanes. 4 NPI/NPD stage gates. Every function covered — product, content, legal, finance, brand, AI learning, social media, website, payments and job search. Click tasks to track progress.</div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-cell"><div class="stat-val" id="s-done" style="color:var(--gold)">0</div><div class="stat-lbl">Complete</div></div>
+  <div class="stat-cell"><div class="stat-val" id="s-pct">0%</div><div class="stat-lbl">Progress</div></div>
+  <div class="stat-cell"><div class="stat-val" id="s-now" style="color:#f87171">0</div><div class="stat-lbl">This week</div></div>
+  <div class="stat-cell"><div class="stat-val" id="s-gates" style="color:var(--gold)">0/4</div><div class="stat-lbl">Gates passed</div></div>
+  <div class="stat-cell"><div class="stat-val" id="s-certs" style="color:#a78bfa">4</div><div class="stat-lbl">AI certificates</div></div>
+  <div class="stat-cell"><div class="stat-val" id="s-total" style="color:rgba(245,243,238,0.3)">0</div><div class="stat-lbl">Total tasks</div></div>
+</div>
+
+<div class="phase-nav">
+  <div class="ptab active" onclick="showPhase('now',this)">&#9670; This week</div>
+  <div class="ptab" onclick="showPhase('p1',this)">Phase 1 &mdash; Foundation (Apr&ndash;May)</div>
+  <div class="ptab" onclick="showPhase('p2',this)">Phase 2 &mdash; Build (May&ndash;Jul)</div>
+  <div class="ptab" onclick="showPhase('p3',this)">Phase 3 &mdash; Launch (Jul&ndash;Sep)</div>
+  <div class="ptab" onclick="showPhase('p4',this)">Phase 4 &mdash; Scale (Q4+)</div>
+</div>
+
+<div class="main-wrap">
+<div class="swim-panel">
+  <div id="phase-now" class="phase-view active"></div>
+  <div id="phase-p1" class="phase-view"></div>
+  <div id="phase-p2" class="phase-view"></div>
+  <div id="phase-p3" class="phase-view"></div>
+  <div id="phase-p4" class="phase-view"></div>
+</div>
+
+<div class="sidebar">
+  <div class="sb-section">
+    <div class="sb-label">Anthropic AI certificates</div>
+    <div class="cert-item"><div class="cert-dot" style="background:#6ee7b7"></div><div class="cert-name">AI Fluency: Framework &amp; Foundations</div><div class="cert-date">Mar 26</div></div>
+    <div class="cert-item"><div class="cert-dot" style="background:#6ee7b7"></div><div class="cert-name">Claude 101</div><div class="cert-date">Mar 26</div></div>
+    <div class="cert-item"><div class="cert-dot" style="background:#6ee7b7"></div><div class="cert-name">Claude Code in Action</div><div class="cert-date">Mar 27</div></div>
+    <div class="cert-item"><div class="cert-dot" style="background:#6ee7b7"></div><div class="cert-name">Introduction to Claude Cowork</div><div class="cert-date">Mar 26</div></div>
+    <div style="font-size:10px;color:rgba(245,243,238,0.25);margin-top:6px;line-height:1.5">All verified on LinkedIn. Issued by Anthropic x UCC.</div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Product suite</div>
+    <div class="product-row"><span class="prod-name">Mandate</span><span class="prod-price">&pound;49/mo</span><span class="prod-status ps-built">Built</span></div>
+    <div class="product-row"><span class="prod-name">SQDCP Live</span><span class="prod-price">&pound;29/mo</span><span class="prod-status ps-next">Next</span></div>
+    <div class="product-row"><span class="prod-name">MD Cockpit</span><span class="prod-price">&pound;79/mo</span><span class="prod-status ps-next">Next</span></div>
+    <div class="product-row"><span class="prod-name">AI Readiness Radar</span><span class="prod-price">Free</span><span class="prod-status ps-next">Phase 2</span></div>
+    <div class="product-row"><span class="prod-name">People Pulse</span><span class="prod-price">&pound;39/mo</span><span class="prod-status ps-later">Phase 3</span></div>
+    <div class="product-row"><span class="prod-name">OpEx Health Check</span><span class="prod-price">&pound;499</span><span class="prod-status ps-later">Phase 4</span></div>
+    <div class="product-row"><span class="prod-name">Consultancy</span><span class="prod-price">&pound;1,500/day</span><span class="prod-status ps-next">Active</span></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Revenue targets</div>
+    <div class="rev-box" style="background:rgba(26,107,74,0.08);border:1px solid rgba(26,107,74,0.2)"><div class="rev-val" style="color:#6ee7b7">&pound;5k MRR</div><div class="rev-lbl">Phase 3 target &mdash; Sep 2026</div></div>
+    <div class="rev-box" style="background:rgba(184,147,90,0.07);border:1px solid rgba(184,147,90,0.2)"><div class="rev-val" style="color:var(--gold)">&pound;15k MRR</div><div class="rev-lbl">Phase 4 target &mdash; Q4 2026</div></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Claude&rsquo;s roles on this project</div>
+    <div class="role-card"><div class="role-card-title">&#127775; Agent &amp; Coach</div><div class="role-card-sub">Acts on your behalf. Holds you accountable. Every session starts with a check-in.</div></div>
+    <div class="role-card"><div class="role-card-title">&#128196; Project Manager</div><div class="role-card-sub">Owns this plan. Tracks gates. Flags blockers. Recommends sequencing.</div></div>
+    <div class="role-card"><div class="role-card-title">&#128187; Developer</div><div class="role-card-sub">Writes all code via Claude Code. Builds every product in the suite.</div></div>
+    <div class="role-card"><div class="role-card-title">&#128227; CMO &amp; Social Guru</div><div class="role-card-sub">Writes all content. Manages the brand. Designs the content calendar.</div></div>
+    <div class="role-card"><div class="role-card-title">&#128176; CFO</div><div class="role-card-sub">Unit economics, pricing, financial modelling, Stripe integration strategy.</div></div>
+    <div class="role-card"><div class="role-card-title">&#9878; Legal</div><div class="role-card-sub">Drafts T&amp;Cs, Privacy Policy, GDPR documentation. Not a substitute for a solicitor.</div></div>
+    <div class="role-card"><div class="role-card-title">&#127828; Designer</div><div class="role-card-sub">Brand architecture, Canva briefs, image direction, UI/UX for all products.</div></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-label">Accountability rules</div>
+    <div class="acc-rule"><div class="acc-dot" style="background:var(--gold)"></div><div class="acc-text">Every session opens with: what got done since last time?</div></div>
+    <div class="acc-rule"><div class="acc-dot" style="background:#f87171"></div><div class="acc-text">No gate passes without all criteria met. No exceptions.</div></div>
+    <div class="acc-rule"><div class="acc-dot" style="background:#93c5fd"></div><div class="acc-text">Post and stay &mdash; 60 mins engagement after every LinkedIn post</div></div>
+    <div class="acc-rule"><div class="acc-dot" style="background:#6ee7b7"></div><div class="acc-text">One Claude Code session per week minimum on product</div></div>
+    <div class="acc-rule"><div class="acc-dot" style="background:#a78bfa"></div><div class="acc-text">Continue AI learning &mdash; next certificate target set each phase</div></div>
+  </div>
+</div>
+</div>
+
+<script>
+var LANES = {
+  now:[
+    {id:'l-brand-now',name:'Brand & LinkedIn',icon:'&#10022;',color:'#1a2e47',role:'CMO',roleColor:'#1e3a8a',progColor:'#93c5fd',tasks:[
+      {id:'n1',title:'Update LinkedIn headline',sub:'Senior Operational Leader | COO · MD · Ops Director | Building AI tools for operational excellence | TIC & PE-backed specialist',timing:'today',owner:'Lee',now:true},
+      {id:'n2',title:'Update LinkedIn About — first two lines',sub:"'I've spent 25 years fixing businesses... Now I'm building the tools I always wished I'd had.' Use the approved draft.",timing:'today',owner:'Lee',now:true},
+      {id:'n3',title:'Add 4 Anthropic certificates to LinkedIn',sub:'Licences & Certifications section. Add verification links from each certificate PDF. Takes 10 minutes.',timing:'today',owner:'Lee',now:true},
+      {id:'n4',title:'Schedule Post 1 — Tuesday 7:30am',sub:"'Six months ago I couldn't write a line of code.' Use Claude Code screenshot as image.",timing:'today',owner:'Lee',now:true},
+      {id:'n5',title:'Schedule Post 2 — Thursday 7:30am',sub:'SQDCP board story. Engage all comments within 60 mins of posting.',timing:'this-week',owner:'Lee'},
+      {id:'n6',title:'Take screenshots for Posts 1, 3, 5, 6',sub:'Claude Code terminal (dark). Mandate running in browser. Side-by-side for Post 6. Crop to 1200×627px.',timing:'this-week',owner:'Lee'},
+    ]},
+    {id:'l-ailearn-now',name:'AI Learning',icon:'&#127891;',color:'#2e1a47',role:'Mentor',roleColor:'#5b21b6',progColor:'#a78bfa',tasks:[
+      {id:'n7',title:'Share AI Fluency certificate on LinkedIn',sub:'Post about completing the Anthropic AI Fluency: Framework & Foundations course. Use certificate image.',timing:'today',owner:'Lee',now:true},
+      {id:'n8',title:'Identify next Anthropic course to complete',sub:'Review remaining courses at learn.anthropic.com. Aim: one new certificate per phase.',timing:'this-week',owner:'Lee'},
+      {id:'n9',title:'Write AI learning post — the 4D Framework',sub:"'Delegation. Description. Discernment. Diligence. The framework I now use every time I work with AI.' Practical, not academic.",timing:'this-week',owner:'Lee+Claude'},
+    ]},
+    {id:'l-dev-now',name:'Product & Dev setup',icon:'&#9641;',color:'#1e1a3d',role:'Developer',roleColor:'#4c1d95',progColor:'#818cf8',tasks:[
+      {id:'n10',title:'Create GitHub account',sub:'github.com — needed before Vercel. Use christopherwade or christopherleewade.',timing:'today',owner:'Lee',now:true},
+      {id:'n11',title:'Create Vercel account',sub:'vercel.com — sign up with GitHub. Free tier. This is your hosting platform.',timing:'this-week',owner:'Lee'},
+      {id:'n12',title:'Create Supabase account',sub:"supabase.com — new project called 'mandate'. EU West region. Save database password.",timing:'this-week',owner:'Lee'},
+      {id:'n13',title:'Verify Node.js v18+ installed',sub:"Run 'node --version' in terminal. Download from nodejs.org LTS if not present.",timing:'this-week',owner:'Lee'},
+    ]},
+    {id:'l-jobsearch-now',name:'Job search',icon:'&#9670;',color:'#0f2820',role:'Agent',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'n14',title:'Follow up Berwick Partners — Jonathan Burke',sub:'Resend with corrected contact. Use Mandate outreach composer. CV S recommended.',timing:'today',owner:'Lee',now:true},
+      {id:'n15',title:'Send outreach to Eton Bridge and BIE Executive',sub:'Both in Mandate recruiter list with status To Contact. Draft via Mandate composer.',timing:'this-week',owner:'Lee'},
+      {id:'n16',title:'Check Mandate job feed — apply to 1 live role',sub:'Use CV scoring first. Draft cover via outreach composer. Document outcome.',timing:'this-week',owner:'Lee'},
+    ]},
+    {id:'l-substack-now',name:'Substack setup',icon:'&#9993;',color:'#1c1a0f',role:'CMO',roleColor:'#78350f',progColor:'#fbbf24',tasks:[
+      {id:'n17',title:"Create Substack — 'The Operational Edge'",sub:'substack.com. Tagline: AI, operational excellence and building businesses that perform. Free plan to start.',timing:'this-week',owner:'Lee'},
+      {id:'n18',title:'Write welcome email to first subscribers',sub:"Short, personal. Who you are, why you're writing, what to expect. No sell. Just introduction.",timing:'this-week',owner:'Lee+Claude'},
+    ]},
+  ],
+  p1:[
+    {id:'l-ailearn-p1',name:'AI Learning',icon:'&#127891;',color:'#2e1a47',role:'Mentor',roleColor:'#5b21b6',progColor:'#a78bfa',tasks:[
+      {id:'p1_al1',title:'Complete next Anthropic course',sub:'Aim for one additional certificate by end of Phase 1. Add to LinkedIn when done.',timing:'end-may',owner:'Lee'},
+      {id:'p1_al2',title:'Write AI learning post — Claude Code in Action',sub:"'I built a working app using Claude Code. Here's what I actually learned about how it works.' Specific and honest.",timing:'week2',owner:'Lee+Claude'},
+      {id:'p1_al3',title:'Write AI learning post — the 4D Framework applied',sub:'How you use Delegation, Description, Discernment, Diligence in your actual workflow. Real examples only.',timing:'week3',owner:'Lee+Claude'},
+      {id:'p1_al4',title:'Write AI learning post — What Claude Cowork means for ops leaders',sub:'Introduction to agentic AI. Practical implications for operational teams. Non-technical.',timing:'week4',owner:'Lee+Claude'},
+      {id:'p1_al5',title:'Build AI learning section in LinkedIn Featured',sub:'Pin: certificate images, best AI posts, Substack link. Featured section is prime real estate.',timing:'week2',owner:'Lee'},
+    ]},
+    {id:'l-social-p1',name:'Social Media & Content',icon:'&#128241;',color:'#1a2e47',role:'CMO',roleColor:'#1e3a8a',progColor:'#93c5fd',tasks:[
+      {id:'p1_sm1',title:'Publish Week 1 posts (Tue + Thu)',sub:'Post 1: AI and code story. Post 2: SQDCP board. 60 mins engagement after each.',timing:'week1',owner:'Lee'},
+      {id:'p1_sm2',title:'Publish Week 2 posts',sub:'Post 3: CV scoring teaser. Post 4: TIC/PE EBITDA graphic.',timing:'week2',owner:'Lee'},
+      {id:'p1_sm3',title:'Publish Week 3 posts',sub:'Post 5: MD Cockpit teaser. Post 6: Built a working app. This is the breakout post.',timing:'week3',owner:'Lee'},
+      {id:'p1_sm4',title:'Publish Week 4 posts',sub:'Post 7: NPS -20 to +50. Post 8: AI honest assessment.',timing:'week4',owner:'Lee'},
+      {id:'p1_sm5',title:'Write Month 2 content — 8 posts',sub:'Based on Month 1 engagement data. Double down on best performing pillar.',timing:'end-may',owner:'Lee+Claude'},
+      {id:'p1_sm6',title:'Publish first Substack issue',sub:"The Operational Edge Issue 1: 'What I've learned using AI for 90 days as a senior operational leader.'",timing:'end-may',owner:'Lee+Claude'},
+      {id:'p1_sm7',title:'Build Canva brand template',sub:'Navy #0D1B2E + gold #B8935A. LinkedIn post template 1200×627px. Save as reusable template.',timing:'week2',owner:'Lee'},
+    ]},
+    {id:'l-website-p1',name:'Website & Digital Presence',icon:'&#127760;',color:'#0f1f2e',role:'Designer + Developer',roleColor:'#0c4a6e',progColor:'#7dd3fc',tasks:[
+      {id:'p1_web1',title:'Register domain — christopherwade.co.uk',sub:'Check availability. Also register christopherwade.com if available. Use Namecheap or Cloudflare.',timing:'week2',owner:'Lee'},
+      {id:'p1_web2',title:'Build one-page personal site',sub:'Name, positioning, 4 AI certificates, LinkedIn link, contact form. Clean, professional. Claude Code builds it.',timing:'week3',owner:'Claude Code'},
+      {id:'p1_web3',title:'Set up email — christopher@christopherwade.co.uk',sub:'Google Workspace or similar. Professional email for all business correspondence.',timing:'week2',owner:'Lee'},
+      {id:'p1_web4',title:'Add Google Analytics to personal site',sub:'Track traffic sources. Know which LinkedIn posts drive website visits.',timing:'week3',owner:'Claude Code'},
+    ]},
+    {id:'l-legal-p1',name:'Legal & GDPR',icon:'&#9878;',color:'#2d1c0a',role:'Legal',roleColor:'#78350f',progColor:'#fcd34d',tasks:[
+      {id:'p1_lg1',title:'Draft Privacy Policy — all products',sub:'Covers Mandate, SQDCP Live, MD Cockpit and website. GDPR compliant. Data handling, retention, deletion rights.',timing:'week3',owner:'Claude+Solicitor'},
+      {id:'p1_lg2',title:'Draft Terms of Service — SaaS products',sub:'Subscription terms, usage, IP ownership, refund policy. Must exist before any product goes live.',timing:'week3',owner:'Claude+Solicitor'},
+      {id:'p1_lg3',title:'Cookie consent implementation',sub:'All websites need a cookie banner. GDPR requires explicit consent. Implement via Cookiebot or similar.',timing:'week4',owner:'Claude Code'},
+      {id:'p1_lg4',title:'Verify API commercial use rights',sub:'Adzuna, JSearch, Companies House — confirm commercial use permitted on current API keys.',timing:'week2',owner:'Lee'},
+      {id:'p1_lg5',title:'Register as sole trader or Ltd company',sub:'Decision: sole trader (simpler) vs Ltd (more professional for B2B). Discuss with accountant.',timing:'end-may',owner:'Lee'},
+      {id:'p1_lg6',title:'ICO registration — data protection',sub:'Required if handling personal data commercially. £40/year. Register at ico.org.uk.',timing:'end-may',owner:'Lee'},
+    ]},
+    {id:'l-finance-p1',name:'Finance & Payments',icon:'&#163;',color:'#0f2d1a',role:'CFO',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p1_fn1',title:'Set up business bank account',sub:'Separate from personal. Starling Business or Monzo Business — both free, instant online setup.',timing:'week2',owner:'Lee'},
+      {id:'p1_fn2',title:'Set up Stripe account',sub:'stripe.com — link to business bank account. Enable card payments. Test mode first.',timing:'week3',owner:'Lee'},
+      {id:'p1_fn3',title:'Build unit economics model',sub:'Claude API cost per user, Supabase at scale, Stripe fees, break-even subscriber count per plan.',timing:'end-may',owner:'Lee+Claude'},
+      {id:'p1_fn4',title:'Set up bookkeeping — FreeAgent or Xero',sub:'Track all income and expenses from day one. Essential for tax and investor reporting.',timing:'week3',owner:'Lee'},
+      {id:'p1_fn5',title:'VAT registration decision',sub:'Not required until £90k turnover but worth understanding threshold and timing.',timing:'end-may',owner:'Lee+Accountant'},
+    ]},
+    {id:'l-mandate-p1',name:'Product — Mandate rebuild',icon:'&#9670;',color:'#1e1a3d',role:'Developer',roleColor:'#4c1d95',progColor:'#818cf8',tasks:[
+      {id:'p1_md1',title:'Scaffold Next.js project via Claude Code',sub:'New project. Claude Code initialises, pushes to GitHub, Vercel auto-deploys. Live URL in 30 mins.',timing:'week2',owner:'Claude Code'},
+      {id:'p1_md2',title:'Connect Supabase auth',sub:'Email magic link login. User accounts. Row level security. Cross-device access.',timing:'week3',owner:'Claude Code'},
+      {id:'p1_md3',title:'Migrate pipeline + recruiter to Supabase',sub:'Replace all localStorage. Data persists across browser clears and devices.',timing:'week4',owner:'Claude Code'},
+      {id:'p1_md4',title:'Server-side Claude API proxy',sub:'API key in Vercel env variable. Never in browser. CORS solved for Reed/LinkedIn.',timing:'end-may',owner:'Claude Code'},
+    ]},
+    {id:'l-jobsearch-p1',name:'Job search',icon:'&#9670;',color:'#0f2820',role:'Agent',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p1_js1',title:'Complete all 8 recruiter outreach messages',sub:'All 8 in Mandate tracker contacted. Status updated after each.',timing:'week2',owner:'Lee'},
+      {id:'p1_js2',title:'Apply to 3 live roles from Mandate feed',sub:'CV score each first. Use Mandate outreach composer for cover messages.',timing:'ongoing',owner:'Lee'},
+    ]},
+  ],
+  p2:[
+    {id:'l-ailearn-p2',name:'AI Learning',icon:'&#127891;',color:'#2e1a47',role:'Mentor',roleColor:'#5b21b6',progColor:'#a78bfa',tasks:[
+      {id:'p2_al1',title:'Complete third Anthropic course',sub:'Continue structured AI learning. Document what you learn and apply it immediately to a real problem.',timing:'jun',owner:'Lee'},
+      {id:'p2_al2',title:'Write AI learning post — Generative AI explained for ops leaders',sub:'Based on the Understanding Generative AI module. Pre-training, fine-tuning, deployment in plain language.',timing:'jun',owner:'Lee+Claude'},
+      {id:'p2_al3',title:'Create AI learning resource for Substack',sub:"'My AI toolkit — what I actually use and how.' Practical guide for operational leaders. High shareability.",timing:'jul',owner:'Lee+Claude'},
+      {id:'p2_al4',title:'Build AI knowledge into consultancy offer',sub:'Package AI capability assessment as a consulting product. Pilot with one client before formal launch.',timing:'jul',owner:'Lee+Claude'},
+    ]},
+    {id:'l-social-p2',name:'Social Media & Content',icon:'&#128241;',color:'#1a2e47',role:'CMO',roleColor:'#1e3a8a',progColor:'#93c5fd',tasks:[
+      {id:'p2_sm1',title:'Reach 500 LinkedIn followers',sub:'Consistent posting + engagement from Phase 1. Should hit this by end of Phase 2.',timing:'jul',owner:'Lee'},
+      {id:'p2_sm2',title:'Record first Loom/YouTube video',sub:'5-min screen recording: Mandate generating an outreach email. Voice + screen. Upload to YouTube.',timing:'jul',owner:'Lee'},
+      {id:'p2_sm3',title:'Publish SQDCP whitepaper',sub:'Long-form Substack piece: SQDCP in regulated and PE-backed businesses. Dual purpose: lead magnet + speaking credential.',timing:'jun',owner:'Lee+Claude'},
+      {id:'p2_sm4',title:'Reach 100 Substack subscribers',sub:'Every LinkedIn post links back. Bi-weekly publishing. This is your owned audience.',timing:'jul',owner:'Lee'},
+      {id:'p2_sm5',title:'Post about each new product launch',sub:'SQDCP Live and AI Readiness Radar get dedicated launch posts. Show the build, not just the product.',timing:'jul',owner:'Lee+Claude'},
+    ]},
+    {id:'l-website-p2',name:'Website & Digital Presence',icon:'&#127760;',color:'#0f1f2e',role:'Designer + Developer',roleColor:'#0c4a6e',progColor:'#7dd3fc',tasks:[
+      {id:'p2_web1',title:'Build product landing pages',sub:'SQDCP Live and MD Cockpit each get a landing page. Problem, solution, pricing, CTA. Claude Code builds.',timing:'jun',owner:'Claude Code'},
+      {id:'p2_web2',title:'SEO basics — title tags, meta descriptions',sub:'All pages have proper meta tags. Target: "SQDCP software UK" and "MD dashboard small business" keywords.',timing:'jun',owner:'Claude Code'},
+      {id:'p2_web3',title:'Set up email capture — waitlist',sub:'Mailchimp or ConvertKit. Collect emails from LinkedIn before products launch. Build list ahead of launch.',timing:'jun',owner:'Claude Code'},
+    ]},
+    {id:'l-sqdcp-p2',name:'Product — SQDCP Live',icon:'&#9711;',color:'#0f2820',role:'Developer',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p2_sq1',title:'Build SQDCP Live prototype — single file first',sub:'Five KPI panels, RAG status, daily entry, weekly snapshot. One Claude Code session.',timing:'jun',owner:'Claude Code'},
+      {id:'p2_sq2',title:'SQDCP Live — add AI commentary',sub:'Red RAG triggers AI suggestion of likely causes and recommended actions.',timing:'jun',owner:'Claude Code'},
+      {id:'p2_sq3',title:'SQDCP Live — Next.js rebuild with Supabase',sub:'Auth, data persistence, team sharing, multi-user per business.',timing:'jul',owner:'Claude Code'},
+      {id:'p2_sq4',title:'SQDCP Live — Stripe integration',sub:'£29/month per team. 14-day trial. Plan gating.',timing:'jul',owner:'Claude Code'},
+    ]},
+    {id:'l-cockpit-p2',name:'Product — MD Cockpit',icon:'&#9670;',color:'#2d1c0a',role:'Developer',roleColor:'#78350f',progColor:'#fcd34d',tasks:[
+      {id:'p2_ck1',title:'Build MD Cockpit prototype — single file',sub:'Five panels: Commercial, Operations, People, Finance, Delivery. Manual entry. RAG status. AI insight.',timing:'jun',owner:'Claude Code'},
+      {id:'p2_ck2',title:'MD Cockpit — user test with 3 MDs',sub:'Share prototype with 3 business owners. Structured feedback. What is missing, what is wrong.',timing:'jul',owner:'Lee'},
+      {id:'p2_ck3',title:'MD Cockpit — consultancy bridge built in',sub:"Red RAG shows 'Book a diagnostic call' CTA. Routes to Lee's calendar.",timing:'jul',owner:'Claude Code'},
+    ]},
+    {id:'l-radar-p2',name:'Product — AI Readiness Radar',icon:'&#9684;',color:'#1e1a3d',role:'Developer',roleColor:'#4c1d95',progColor:'#818cf8',tasks:[
+      {id:'p2_rd1',title:'Build AI Readiness Radar — free tool',sub:'25-question diagnostic. Scored output across 5 business areas. Free. Primary consultancy lead gen.',timing:'jul',owner:'Claude Code'},
+      {id:'p2_rd2',title:'AI Readiness Radar — launch on LinkedIn',sub:'Post about the free tool. Link in comments. Collect emails via Substack.',timing:'jul',owner:'Lee+Claude'},
+    ]},
+    {id:'l-finance-p2',name:'Finance & Payments',icon:'&#163;',color:'#0f2d1a',role:'CFO',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p2_fn1',title:'Stripe — wire subscriptions for SQDCP Live',sub:'£29/month plan. 14-day trial. Webhook for subscription status. Test end-to-end before launch.',timing:'jul',owner:'Claude Code'},
+      {id:'p2_fn2',title:'First revenue forecast — 12 month model',sub:'Conservative / base / optimistic. Inputs: subscriber counts, churn rate, day rate days. Google Sheets.',timing:'jun',owner:'Lee+Claude'},
+    ]},
+    {id:'l-jobsearch-p2',name:'Job search',icon:'&#9670;',color:'#0f2820',role:'Agent',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p2_js1',title:'First consultancy enquiry converted',sub:'From AI Readiness Radar or LinkedIn content. Half-day diagnostic minimum at £750.',timing:'jul',owner:'Lee'},
+      {id:'p2_js2',title:'Review executive search pipeline — add 5 new firms',sub:'Research and add 5 more firms to Mandate. Focus on PE-backed and TIC sector specialists.',timing:'jun',owner:'Lee'},
+    ]},
+  ],
+  p3:[
+    {id:'l-ailearn-p3',name:'AI Learning',icon:'&#127891;',color:'#2e1a47',role:'Mentor',roleColor:'#5b21b6',progColor:'#a78bfa',tasks:[
+      {id:'p3_al1',title:'Package AI capability into consulting offer',sub:'Formal AI transformation assessment product. Half-day at £750 or full day at £1,500. Brief written.',timing:'aug',owner:'Lee+Claude'},
+      {id:'p3_al2',title:'AI learning content series — Month 5 posts',sub:'Dedicated AI learning mini-series. Four posts showing the journey from zero to certified to building.',timing:'aug',owner:'Lee+Claude'},
+    ]},
+    {id:'l-social-p3',name:'Social Media & Content',icon:'&#128241;',color:'#1a2e47',role:'CMO',roleColor:'#1e3a8a',progColor:'#93c5fd',tasks:[
+      {id:'p3_sm1',title:'Reach 1,000 LinkedIn followers',sub:'Major credibility milestone. Product launches + speaking will drive this.',timing:'sep',owner:'Lee'},
+      {id:'p3_sm2',title:'First speaking engagement confirmed',sub:'Target TIC conference, PE portfolio day, or ops leadership event. Pitch SQDCP methodology.',timing:'sep',owner:'Lee'},
+      {id:'p3_sm3',title:'Substack at 200 subscribers',sub:'Every post links back. This is your owned audience — protect and grow it.',timing:'sep',owner:'Lee'},
+      {id:'p3_sm4',title:'SQDCP online programme — waitlist open',sub:'LinkedIn posts drive waitlist. Substack email to list when ready. 10 participants target.',timing:'sep',owner:'Lee+Claude'},
+    ]},
+    {id:'l-mandate-p3',name:'Product — Mandate public launch',icon:'&#9670;',color:'#1e1a3d',role:'Developer',roleColor:'#4c1d95',progColor:'#818cf8',tasks:[
+      {id:'p3_md1',title:'Mandate beta — 10 users recruited',sub:'Target outplacement consultancies, executive coaches, senior candidates. Free beta for feedback.',timing:'aug',owner:'Lee'},
+      {id:'p3_md2',title:'Mandate public launch',sub:'Stripe live. £49/month consumer. £299/month outplacement. LinkedIn announcement.',timing:'sep',owner:'Lee+Claude'},
+      {id:'p3_md3',title:'First outplacement firm partnership',sub:'Pitch to Berwick Partners, Odgers, Practicus. White label at £299/month.',timing:'sep',owner:'Lee'},
+    ]},
+    {id:'l-sqdcp-p3',name:'Product — SQDCP Live launch',icon:'&#9711;',color:'#0f2820',role:'Developer',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p3_sq1',title:'SQDCP Live public launch',sub:'£29/month per team. LinkedIn announcement. Target 20 paying teams by end Sep.',timing:'aug',owner:'Lee+Claude'},
+      {id:'p3_sq2',title:'People Pulse prototype build',sub:'Team capability matrix + monthly culture health check. Connects to Lee people specialism.',timing:'sep',owner:'Claude Code'},
+    ]},
+    {id:'l-commercial-p3',name:'Commercial & Sales',icon:'&#128200;',color:'#0f2d1a',role:'CSO',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p3_cm1',title:'First day rate consultancy mandate',sub:'Target £1,000–1,500/day. Ops assessment or AI transformation. From content or Radar lead.',timing:'aug',owner:'Lee'},
+      {id:'p3_cm2',title:'Revenue target: £5k MRR',sub:'Combined: Mandate subs + SQDCP subs + consultancy. First real commercial milestone.',timing:'sep',owner:'Lee'},
+      {id:'p3_cm3',title:'SQDCP online programme — first cohort',sub:'4 sessions. £499 per person. 10 participants minimum.',timing:'sep',owner:'Lee+Claude'},
+    ]},
+    {id:'l-website-p3',name:'Website & Marketing Site',icon:'&#127760;',color:'#0f1f2e',role:'Designer + Developer',roleColor:'#0c4a6e',progColor:'#7dd3fc',tasks:[
+      {id:'p3_web1',title:'Full product marketing website',sub:'Homepage covering all products + consultancy. Blog fed by Substack. Proper SEO. Claude Code builds.',timing:'aug',owner:'Claude Code'},
+      {id:'p3_web2',title:'Case studies page',sub:'First 2-3 client outcomes documented. Anonymous if needed. Proof of the methodology.',timing:'sep',owner:'Lee+Claude'},
+      {id:'p3_web3',title:'Google Search Console + Sitemap',sub:'Submit sitemap. Monitor search impressions. Track which pages drive traffic.',timing:'aug',owner:'Claude Code'},
+    ]},
+  ],
+  p4:[
+    {id:'l-ailearn-p4',name:'AI Learning',icon:'&#127891;',color:'#2e1a47',role:'Mentor',roleColor:'#5b21b6',progColor:'#a78bfa',tasks:[
+      {id:'p4_al1',title:'Publish AI + OpEx thought leadership article',sub:'Long-form piece: The operational leader\'s guide to AI. Pitched to a trade publication or industry newsletter.',timing:'q4',owner:'Lee+Claude'},
+      {id:'p4_al2',title:'Develop AI assessment methodology',sub:'Formal framework for assessing business AI readiness. Proprietary, documented, licensable.',timing:'q4',owner:'Lee+Claude'},
+    ]},
+    {id:'l-products-p4',name:'Product — Scale',icon:'&#9641;',color:'#1e1a3d',role:'Developer',roleColor:'#4c1d95',progColor:'#818cf8',tasks:[
+      {id:'p4_pr1',title:'OpEx Health Check — build and launch',sub:'40-question diagnostic. Benchmarked against PE-backed standards. £499 with debrief call.',timing:'q4',owner:'Claude Code'},
+      {id:'p4_pr2',title:'Process Clarity — build and launch',sub:'Simple process mapping + SOP builder. AI suggests improvements. £49/month.',timing:'q4',owner:'Claude Code'},
+      {id:'p4_pr3',title:'Mandate white label — first exec search firm',sub:'Berwick Partners, Odgers or Practicus. White label at £999/month.',timing:'q4',owner:'Lee'},
+      {id:'p4_pr4',title:'MD Cockpit — Xero/QuickBooks integration',sub:'Finance panel pulls from accounting software. Removes manual entry.',timing:'q4',owner:'Claude Code'},
+    ]},
+    {id:'l-commercial-p4',name:'Commercial targets',icon:'&#128200;',color:'#0f2d1a',role:'CSO',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p4_cm1',title:'£15k MRR target',sub:'SaaS £8k + consultancy £6k + speaking/course £1k+.',timing:'q4',owner:'Lee'},
+      {id:'p4_cm2',title:'Consultancy at £1,500/day full rate',sub:'Unlocked by documented case studies, published content and sector reputation.',timing:'q4',owner:'Lee'},
+      {id:'p4_cm3',title:'2,500 LinkedIn followers',sub:'Compound effect of content + products + speaking.',timing:'q4',owner:'Lee'},
+      {id:'p4_cm4',title:'Second SQDCP cohort — recurring income',sub:'Two cohorts per year from here. £5k per cohort.',timing:'q4',owner:'Lee'},
+    ]},
+    {id:'l-finance-p4',name:'Finance & Scale',icon:'&#163;',color:'#0f2d1a',role:'CFO',roleColor:'#064e3b',progColor:'#fcd34d',tasks:[
+      {id:'p4_fn1',title:'Series A readiness review',sub:'Is the business fundable? Review metrics, ARR, churn, CAC. Decision: bootstrap vs raise.',timing:'q4',owner:'Lee+Claude'},
+      {id:'p4_fn2',title:'Consider Ltd company if still sole trader',sub:'At £15k MRR the tax advantages of Ltd become significant. Speak to accountant.',timing:'q4',owner:'Lee+Accountant'},
+    ]},
+  ]
+};
+
+var GATES = {
+  p1:{
+    id:'gate1',title:'Gate 1 — Foundation complete',
+    timing:'End of Phase 1 (end May)',
+    note:'All criteria must be met before Phase 2 build begins. No exceptions.',
+    criteria:[
+      {id:'g1c1',text:'LinkedIn headline and About updated with new positioning'},
+      {id:'g1c2',text:'All 4 Anthropic certificates on LinkedIn profile'},
+      {id:'g1c3',text:'8 LinkedIn posts published (Month 1 complete)'},
+      {id:'g1c4',text:'Substack live with at least 1 issue published'},
+      {id:'g1c5',text:'GitHub, Vercel and Supabase accounts created'},
+      {id:'g1c6',text:'Personal website domain registered and basic site live'},
+      {id:'g1c7',text:'Business bank account open and Stripe account created'},
+      {id:'g1c8',text:'Privacy Policy and T&Cs drafted'},
+      {id:'g1c9',text:'Mandate Next.js scaffold live on Vercel'},
+      {id:'g1c10',text:'All 8 recruiters contacted via Mandate'},
+    ]
+  },
+  p2:{
+    id:'gate2',title:'Gate 2 — Build complete',
+    timing:'End of Phase 2 (end July)',
+    note:'Products must be testable before launch phase begins.',
+    criteria:[
+      {id:'g2c1',text:'Mandate rebuilt on Next.js with Supabase auth and Stripe'},
+      {id:'g2c2',text:'SQDCP Live prototype built and user-tested'},
+      {id:'g2c3',text:'MD Cockpit prototype built and user-tested with 3 MDs'},
+      {id:'g2c4',text:'AI Readiness Radar free tool live'},
+      {id:'g2c5',text:'500 LinkedIn followers reached'},
+      {id:'g2c6',text:'SQDCP whitepaper published on Substack'},
+      {id:'g2c7',text:'First consultancy enquiry converted (any value)'},
+      {id:'g2c8',text:'ICO registration complete'},
+      {id:'g2c9',text:'Product landing pages live with email capture'},
+      {id:'g2c10',text:'Unit economics model built — know break-even numbers'},
+    ]
+  },
+  p3:{
+    id:'gate3',title:'Gate 3 — Launch complete',
+    timing:'End of Phase 3 (end September)',
+    note:'Revenue must be flowing before scaling. Vanity metrics do not count.',
+    criteria:[
+      {id:'g3c1',text:'Mandate live with paying subscribers'},
+      {id:'g3c2',text:'SQDCP Live with 10+ paying teams'},
+      {id:'g3c3',text:'£5k MRR achieved across all revenue streams'},
+      {id:'g3c4',text:'1,000 LinkedIn followers reached'},
+      {id:'g3c5',text:'First speaking engagement confirmed or delivered'},
+      {id:'g3c6',text:'First SQDCP online programme cohort confirmed'},
+      {id:'g3c7',text:'At least 1 day rate consultancy mandate delivered'},
+      {id:'g3c8',text:'200 Substack subscribers'},
+      {id:'g3c9',text:'Case studies page live with 2+ documented outcomes'},
+      {id:'g3c10',text:'Full marketing website live with all products featured'},
+    ]
+  },
+  p4:{
+    id:'gate4',title:'Gate 4 — Scale review',
+    timing:'Q4 2026',
+    note:'Decide: continue bootstrapping or explore investment. Review all metrics.',
+    criteria:[
+      {id:'g4c1',text:'£15k MRR target reached'},
+      {id:'g4c2',text:'Consultancy at full £1,500/day rate'},
+      {id:'g4c3',text:'2,500+ LinkedIn followers'},
+      {id:'g4c4',text:'OpEx Health Check and Process Clarity launched'},
+      {id:'g4c5',text:'Mandate white label deal signed with one firm'},
+      {id:'g4c6',text:'AI assessment methodology documented and licensed'},
+      {id:'g4c7',text:'Second SQDCP cohort delivered'},
+      {id:'g4c8',text:'Series A readiness review completed'},
+    ]
+  }
+};
+
+var KEY={today:'Today','this-week':'This week',week1:'Week 1',week2:'Week 2',week3:'Week 3',week4:'Week 4','end-may':'End May',jun:'June',jul:'July',aug:'August',sep:'September',q4:'Q4 2026',ongoing:'Ongoing'};
+var BADGE={'today':'tb-now','this-week':'tb-now',week1:'tb-week',week2:'tb-week',week3:'tb-week',week4:'tb-week','end-may':'tb-week',jun:'tb-month',jul:'tb-month',aug:'tb-month',sep:'tb-month',q4:'tb-later',ongoing:'tb-later'};
+var PROGCOL={week1:'#fbbf24',week2:'#fbbf24','end-may':'#fbbf24',jun:'#93c5fd',jul:'#93c5fd',aug:'#6ee7b7',sep:'#6ee7b7',q4:'#a78bfa'};
+
+var taskStates=JSON.parse(localStorage.getItem('mp_tasks')||'{}');
+var gateStates=JSON.parse(localStorage.getItem('mp_gates')||'{}');
+
+function getAllTasks(){
+  var all=[];
+  Object.keys(LANES).forEach(function(ph){LANES[ph].forEach(function(l){l.tasks.forEach(function(t){all.push({task:t,phase:ph});});});});
+  return all;
+}
+function getAllGateCriteria(){
+  var all=[];
+  Object.keys(GATES).forEach(function(ph){GATES[ph].criteria.forEach(function(c){all.push({crit:c,phase:ph});});});
+  return all;
+}
+
+function buildPhase(ph){
+  var el=document.getElementById('phase-'+ph);
+  if(!el)return;
+  el.innerHTML='';
+
+  // Gate if applicable
+  if(GATES[ph]){
+    var g=GATES[ph];
+    var gPassed=g.criteria.filter(function(c){return gateStates[c.id];}).length;
+    var gTotal=g.criteria.length;
+    var gPct=Math.round(gPassed/gTotal*100);
+    var statusText=gPassed===gTotal?'APPROVED':''+gPassed+'/'+gTotal+' criteria met';
+    var statusColor=gPassed===gTotal?'background:rgba(26,107,74,0.3);color:#6ee7b7':'background:rgba(245,158,11,0.2);color:#fcd34d';
+    var gDiv=document.createElement('div');
+    gDiv.className='gate-banner';
+    gDiv.innerHTML='<div class="gate-head" onclick="toggleGate(\'gb-'+g.id+'\')">' +
+      '<div class="gate-diamond"><span>G'+(Object.keys(GATES).indexOf(ph)+1)+'</span></div>'+
+      '<div class="gate-title">'+g.title+'</div>'+
+      '<span style="font-size:10px;color:rgba(245,243,238,0.35);margin-right:10px">'+g.timing+'</span>'+
+      '<span class="gate-status-badge" style="'+statusColor+'">'+statusText+'</span>'+
+      '</div>'+
+      '<div class="gate-body open" id="gb-'+g.id+'">'+
+      '<div class="gate-criteria">'+
+      g.criteria.map(function(c){
+        var passed=gateStates[c.id]||false;
+        return '<div class="gate-crit'+(passed?' passed':'')+'" id="gc-'+c.id+'" onclick="toggleGateCrit(\''+c.id+'\',\''+ph+'\')">'+
+          '<div class="gcb'+(passed?' ticked':'')+'" id="gcb-'+c.id+'"></div>'+
+          '<span>'+c.text+'</span></div>';
+      }).join('')+
+      '</div>'+
+      '<div class="gate-note">'+g.note+'</div>'+
+      '</div>';
+    el.appendChild(gDiv);
+  }
+
+  LANES[ph].forEach(function(lane){
+    var done=lane.tasks.filter(function(t){return taskStates[t.id];}).length;
+    var total=lane.tasks.length;
+    var pct=Math.round(done/total*100);
+    var lid='lbody-'+lane.id;
+    var div=document.createElement('div');
+    div.className='swim-lane';
+    div.innerHTML='<div class="lane-head" onclick="toggleLane(\''+lid+'\')">'+
+      '<div class="lane-icon" style="background:'+lane.color+'">'+lane.icon+'</div>'+
+      '<div class="lane-name">'+lane.name+'</div>'+
+      '<span class="lane-role" style="border-color:'+lane.roleColor+'40;color:'+lane.roleColor+'">'+lane.role+'</span>'+
+      '<div class="lane-prog" id="lp-'+lid+'">'+done+'/'+total+'</div>'+
+      '<div class="lane-chev open" id="lc-'+lid+'">&#9658;</div>'+
+      '</div>'+
+      '<div class="lane-body open" id="'+lid+'">'+
+      '<div class="lane-prog-bar"><div class="lane-prog-fill" id="lpf-'+lid+'" style="width:'+pct+'%;background:'+lane.progColor+'"></div></div>'+
+      lane.tasks.map(function(t){
+        var done2=taskStates[t.id]||false;
+        var cls='task-row'+(done2?' t-done':'')+(t.now&&!done2?' t-now':'');
+        var bc=BADGE[t.timing]||'tb-later';
+        var tl=KEY[t.timing]||t.timing;
+        return '<div class="'+cls+'" id="tr-'+t.id+'" onclick="toggleTask(\''+t.id+'\',\''+ph+'\',\''+lid+'\')">'+
+          '<div class="tcb'+(done2?' ticked':'')+'" id="cb-'+t.id+'"></div>'+
+          '<div class="task-body">'+
+          '<div class="task-title">'+t.title+'</div>'+
+          '<div class="task-sub">'+t.sub+'</div>'+
+          '<div class="task-foot">'+
+          '<span class="tbadge '+bc+'">'+tl+'</span>'+
+          '<span class="t-owner">'+t.owner+'</span>'+
+          '</div></div></div>';
+      }).join('')+
+      '</div>';
+    el.appendChild(div);
+  });
+}
+
+function toggleLane(id){
+  var b=document.getElementById(id);
+  var ch=document.getElementById('lc-'+id);
+  if(b)b.classList.toggle('open');
+  if(ch)ch.classList.toggle('open');
+}
+function toggleGate(id){
+  var b=document.getElementById(id);
+  if(b)b.classList.toggle('open');
+}
+function toggleGateCrit(id,ph){
+  gateStates[id]=!gateStates[id];
+  localStorage.setItem('mp_gates',JSON.stringify(gateStates));
+  var el=document.getElementById('gc-'+id);
+  var cb=document.getElementById('gcb-'+id);
+  if(el)el.classList.toggle('passed',gateStates[id]);
+  if(cb)cb.classList.toggle('ticked',gateStates[id]);
+  updateGateStatus(ph);
+  updateStats();
+}
+function updateGateStatus(ph){
+  if(!GATES[ph])return;
+  var g=GATES[ph];
+  var passed=g.criteria.filter(function(c){return gateStates[c.id];}).length;
+  var total=g.criteria.length;
+  var banner=document.querySelector('#phase-'+ph+' .gate-status-badge');
+  if(!banner)return;
+  if(passed===total){banner.textContent='APPROVED';banner.style.cssText='background:rgba(26,107,74,0.3);color:#6ee7b7';}
+  else{banner.textContent=passed+'/'+total+' criteria met';banner.style.cssText='background:rgba(245,158,11,0.2);color:#fcd34d';}
+}
+function toggleTask(id,ph,lid){
+  taskStates[id]=!taskStates[id];
+  localStorage.setItem('mp_tasks',JSON.stringify(taskStates));
+  var cb=document.getElementById('cb-'+id);
+  var row=document.getElementById('tr-'+id);
+  if(cb)cb.classList.toggle('ticked',taskStates[id]);
+  if(row){row.classList.toggle('t-done',taskStates[id]);if(taskStates[id])row.classList.remove('t-now');}
+  updateLaneProgress(ph,lid);
+  updateStats();
+}
+function updateLaneProgress(ph,lid){
+  var lane=null;
+  (LANES[ph]||[]).forEach(function(l){if('lbody-'+l.id===lid)lane=l;});
+  if(!lane)return;
+  var done=lane.tasks.filter(function(t){return taskStates[t.id];}).length;
+  var total=lane.tasks.length;
+  var lp=document.getElementById('lp-'+lid);
+  var lpf=document.getElementById('lpf-'+lid);
+  if(lp)lp.textContent=done+'/'+total;
+  if(lpf)lpf.style.width=Math.round(done/total*100)+'%';
+}
+function updateStats(){
+  var all=getAllTasks();
+  var done=all.filter(function(a){return taskStates[a.task.id];}).length;
+  var total=all.length;
+  var nowCount=all.filter(function(a){return !taskStates[a.task.id]&&(a.task.timing==='today'||a.task.timing==='this-week');}).length;
+  var gatesPassed=Object.keys(GATES).filter(function(ph){
+    return GATES[ph].criteria.every(function(c){return gateStates[c.id];});
+  }).length;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-pct').textContent=Math.round(done/total*100)+'%';
+  document.getElementById('s-now').textContent=nowCount;
+  document.getElementById('s-gates').textContent=gatesPassed+'/4';
+}
+function showPhase(id,tab){
+  document.querySelectorAll('.phase-view').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.ptab').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('phase-'+id).classList.add('active');
+  if(tab)tab.classList.add('active');
+}
+
+['now','p1','p2','p3','p4'].forEach(buildPhase);
+updateStats();
+</script>
+</body>
+</html>
