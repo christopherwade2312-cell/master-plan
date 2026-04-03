@@ -498,8 +498,8 @@ var KEY={today:'Today','this-week':'This week',week1:'Week 1',week2:'Week 2',wee
 var BADGE={'today':'tb-now','this-week':'tb-now',week1:'tb-week',week2:'tb-week',week3:'tb-week',week4:'tb-week','end-may':'tb-week',jun:'tb-month',jul:'tb-month',aug:'tb-month',sep:'tb-month',q4:'tb-later',ongoing:'tb-later'};
 var PROGCOL={week1:'#fbbf24',week2:'#fbbf24','end-may':'#fbbf24',jun:'#93c5fd',jul:'#93c5fd',aug:'#6ee7b7',sep:'#6ee7b7',q4:'#a78bfa'};
 
-var taskStates=JSON.parse(localStorage.getItem('mp_tasks')||'{}');
-var gateStates=JSON.parse(localStorage.getItem('mp_gates')||'{}');
+var taskStates={};
+var gateStates={};
 
 function getAllTasks(){
   var all=[];
@@ -595,7 +595,6 @@ function toggleGate(id){
 }
 function toggleGateCrit(id,ph){
   gateStates[id]=!gateStates[id];
-  localStorage.setItem('mp_gates',JSON.stringify(gateStates));
   var el=document.getElementById('gc-'+id);
   var cb=document.getElementById('gcb-'+id);
   if(el)el.classList.toggle('passed',gateStates[id]);
@@ -615,7 +614,6 @@ function updateGateStatus(ph){
 }
 function toggleTask(id,ph,lid){
   taskStates[id]=!taskStates[id];
-  localStorage.setItem('mp_tasks',JSON.stringify(taskStates));
   var cb=document.getElementById('cb-'+id);
   var row=document.getElementById('tr-'+id);
   if(cb)cb.classList.toggle('ticked',taskStates[id]);
