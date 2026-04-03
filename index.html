@@ -33,7 +33,12 @@ body{font-family:var(--sans);background:var(--navy);color:var(--paper);font-size
 .logo span{color:var(--gold)}
 .nav-meta{font-size:11px;color:rgba(245,243,238,0.3);font-family:var(--mono)}
 .nav-roles{display:flex;gap:6px;flex-wrap:wrap}
-.role-pill{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;border:1px solid var(--navy-rule2);color:rgba(245,243,238,0.5);cursor:default;letter-spacing:.2px}
+.role-pill{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;border:1px solid var(--navy-rule2);color:rgba(245,243,238,0.5);cursor:pointer;letter-spacing:.2px;transition:all 0.15s;user-select:none}
+.role-pill:hover{border-color:rgba(245,243,238,0.3);color:rgba(245,243,238,0.8)}
+.role-pill.rp-active{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.role-filter-bar{display:none;padding:8px 32px;background:rgba(184,147,90,0.08);border-bottom:1px solid rgba(184,147,90,0.2);font-size:11px;color:var(--gold);font-family:var(--mono);align-items:center;justify-content:space-between}
+.role-filter-bar.rfb-on{display:flex}
+.swim-lane.lane-hidden{display:none}
 
 /* ── HERO ── */
 .hero{padding:48px 32px 36px;border-bottom:1px solid var(--navy-rule);background:linear-gradient(180deg,var(--navy2) 0%,var(--navy) 100%)}
@@ -151,24 +156,29 @@ body{font-family:var(--sans);background:var(--navy);color:var(--paper);font-size
 <nav class="top-nav">
   <div class="logo">Christopher Wade &mdash; <span>Master Plan</span></div>
   <div class="nav-roles">
-    <span class="role-pill">&#127775; Agent</span>
-    <span class="role-pill">&#128218; Coach</span>
-    <span class="role-pill">&#127775; Mentor</span>
-    <span class="role-pill">&#127828; Designer</span>
-    <span class="role-pill">&#128196; PM</span>
-    <span class="role-pill">&#128187; Developer</span>
-    <span class="role-pill">&#128176; CFO</span>
-    <span class="role-pill">&#128227; CMO</span>
-    <span class="role-pill">&#9878; Legal</span>
-    <span class="role-pill">&#128269; Research</span>
+    <span class="role-pill" onclick="filterRole('Agent')">&#127775; Agent</span>
+    <span class="role-pill" onclick="filterRole('Coach')">&#128218; Coach</span>
+    <span class="role-pill" onclick="filterRole('Mentor')">&#127775; Mentor</span>
+    <span class="role-pill" onclick="filterRole('Designer')">&#127828; Designer</span>
+    <span class="role-pill" onclick="filterRole('PM')">&#128196; PM</span>
+    <span class="role-pill" onclick="filterRole('Developer')">&#128187; Developer</span>
+    <span class="role-pill" onclick="filterRole('CFO')">&#128176; CFO</span>
+    <span class="role-pill" onclick="filterRole('CMO')">&#128227; CMO</span>
+    <span class="role-pill" onclick="filterRole('Legal')">&#9878; Legal</span>
+    <span class="role-pill" onclick="filterRole('Research')">&#128269; Research</span>
   </div>
   <div class="nav-meta">Updated April 2026</div>
 </nav>
 
+<div class="role-filter-bar" id="roleFilterBar">
+  <span id="roleFilterLabel">Showing: all roles</span>
+  <span onclick="clearRoleFilter()" style="cursor:pointer;text-decoration:underline;color:rgba(184,147,90,0.6)">Clear filter</span>
+</div>
+
 <div class="hero">
   <div class="hero-eyebrow">From zero to commercial</div>
   <div class="hero-title">The complete plan.<br><em>Every lane. Every gate.</em></div>
-  <div class="hero-sub">12 swim lanes. 4 NPI/NPD stage gates. Every function covered — product, content, legal, finance, brand, AI learning, social media, website, payments and job search. Click tasks to track progress.</div>
+  <div class="hero-sub">12 swim lanes. 4 NPI/NPD stage gates. Every function covered — product, content, legal, finance, brand, AI learning, social media, website, payments and First 100 Days. Click tasks to track progress.</div>
 </div>
 
 <div class="stats-bar">
@@ -268,10 +278,11 @@ var LANES = {
       {id:'n12',title:'Create Supabase account',sub:"supabase.com — new project called 'mandate'. EU West region. Save database password.",timing:'this-week',owner:'Lee'},
       {id:'n13',title:'Verify Node.js v18+ installed',sub:"Run 'node --version' in terminal. Download from nodejs.org LTS if not present.",timing:'this-week',owner:'Lee'},
     ]},
-    {id:'l-jobsearch-now',name:'Job search',icon:'&#9670;',color:'#0f2820',role:'Agent',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
-      {id:'n14',title:'Follow up Berwick Partners — Jonathan Burke',sub:'Resend with corrected contact. Use Mandate outreach composer. CV S recommended.',timing:'today',owner:'Lee',now:true},
-      {id:'n15',title:'Send outreach to Eton Bridge and BIE Executive',sub:'Both in Mandate recruiter list with status To Contact. Draft via Mandate composer.',timing:'this-week',owner:'Lee'},
-      {id:'n16',title:'Check Mandate job feed — apply to 1 live role',sub:'Use CV scoring first. Draft cover via outreach composer. Document outcome.',timing:'this-week',owner:'Lee'},
+    {id:'l-first100-now',name:'First 100 Days — UCE',icon:'&#9670;',color:'#0f2820',role:'GM',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'n14',title:'Start date confirmed — 15 April 2026',sub:'Universal Converting Equipment, Ipswich. GM role with agreed path to MD within 12 months.',timing:'today',owner:'Lee',now:true},
+      {id:'n15',title:'Review contract thoroughly before signing',sub:'Check notice period, probation terms, restrictive covenants. Flag anything that conflicts with product builds or outside business interests.',timing:'today',owner:'Lee',now:true},
+      {id:'n16',title:'Prepare first week plan',sub:'Who to meet, what to observe, what not to change yet. Listen first. Diagnose before acting.',timing:'this-week',owner:'Lee'},
+      {id:'n17',title:'Build First 100 Days diagnostic framework',sub:'Five areas: commercial, operations, people, finance, culture. What does good look like and where is the gap?',timing:'this-week',owner:'Lee+Claude'},
     ]},
     {id:'l-substack-now',name:'Substack setup',icon:'&#9993;',color:'#1c1a0f',role:'CMO',roleColor:'#78350f',progColor:'#fbbf24',tasks:[
       {id:'n17',title:"Create Substack — 'The Operational Edge'",sub:'substack.com. Tagline: AI, operational excellence and building businesses that perform. Free plan to start.',timing:'this-week',owner:'Lee'},
@@ -322,9 +333,13 @@ var LANES = {
       {id:'p1_md3',title:'Migrate pipeline + recruiter to Supabase',sub:'Replace all localStorage. Data persists across browser clears and devices.',timing:'week4',owner:'Claude Code'},
       {id:'p1_md4',title:'Server-side Claude API proxy',sub:'API key in Vercel env variable. Never in browser. CORS solved for Reed/LinkedIn.',timing:'end-may',owner:'Claude Code'},
     ]},
-    {id:'l-jobsearch-p1',name:'Job search',icon:'&#9670;',color:'#0f2820',role:'Agent',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
-      {id:'p1_js1',title:'Complete all 8 recruiter outreach messages',sub:'All 8 in Mandate tracker contacted. Status updated after each.',timing:'week2',owner:'Lee'},
-      {id:'p1_js2',title:'Apply to 3 live roles from Mandate feed',sub:'CV score each first. Use Mandate outreach composer for cover messages.',timing:'ongoing',owner:'Lee'},
+    {id:'l-first100-p1',name:'First 100 Days — UCE',icon:'&#9670;',color:'#0f2820',role:'GM',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p1_js1',title:'Days 1-30 — Listen and diagnose',sub:'No major changes. Meet every key person. Understand the commercial position, operational rhythm, and people landscape. Build the picture before drawing conclusions.',timing:'week1',owner:'Lee'},
+      {id:'p1_js2',title:'Days 1-30 — Identify the three biggest opportunities',sub:'Not problems — opportunities. Where is value being left on the table that a confident operational leader can capture quickly?',timing:'week2',owner:'Lee'},
+      {id:'p1_js3',title:'Days 30-60 — First operational intervention',sub:'One thing changed, improved or implemented. Something visible. Sets the standard and signals intent.',timing:'week3',owner:'Lee'},
+      {id:'p1_js4',title:'Days 30-60 — Build your daily management rhythm',sub:'SQDCP or equivalent. The board that makes performance visible every day. Start as you mean to go on.',timing:'week4',owner:'Lee'},
+      {id:'p1_js5',title:'Days 60-90 — First commercial win',sub:'A new client, a retained contract, a pipeline conversion. Something that proves the commercial instinct is right.',timing:'end-may',owner:'Lee'},
+      {id:'p1_js6',title:'Days 60-100 — MD transition plan agreed',sub:'Formal conversation about what the MD path looks like, what the milestones are, and what the timeline means in practice.',timing:'end-may',owner:'Lee'},
     ]},
   ],
   p2:[
@@ -365,9 +380,10 @@ var LANES = {
       {id:'p2_fn1',title:'Stripe — wire subscriptions for SQDCP Live',sub:'£29/month plan. 14-day trial. Webhook for subscription status. Test end-to-end before launch.',timing:'jul',owner:'Claude Code'},
       {id:'p2_fn2',title:'First revenue forecast — 12 month model',sub:'Conservative / base / optimistic. Inputs: subscriber counts, churn rate, day rate days. Google Sheets.',timing:'jun',owner:'Lee+Claude'},
     ]},
-    {id:'l-jobsearch-p2',name:'Job search',icon:'&#9670;',color:'#0f2820',role:'Agent',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
-      {id:'p2_js1',title:'First consultancy enquiry converted',sub:'From AI Readiness Radar or LinkedIn content. Half-day diagnostic minimum at £750.',timing:'jul',owner:'Lee'},
-      {id:'p2_js2',title:'Review executive search pipeline — add 5 new firms',sub:'Research and add 5 more firms to Mandate. Focus on PE-backed and TIC sector specialists.',timing:'jun',owner:'Lee'},
+    {id:'l-first100-p2',name:'UCE — Performance & MD path',icon:'&#9670;',color:'#0f2820',role:'GM',roleColor:'#064e3b',progColor:'#6ee7b7',tasks:[
+      {id:'p2_js1',title:'First formal performance review',sub:'Against the objectives set in Days 60-100. What has landed, what needs adjusting.',timing:'jun',owner:'Lee'},
+      {id:'p2_js2',title:'MD transition milestones agreed in writing',sub:'Not a verbal agreement — documented milestones with the board or owner. What does the path actually look like?',timing:'jul',owner:'Lee'},
+      {id:'p2_js3',title:'First EBITDA improvement evidenced',sub:'One measurable commercial or operational improvement that can be attributed to your leadership. The first proof point.',timing:'jul',owner:'Lee'},
     ]},
   ],
   p3:[
@@ -440,7 +456,7 @@ var GATES = {
       {id:'g1c7',text:'Business bank account open and Stripe account created'},
       {id:'g1c8',text:'Privacy Policy and T&Cs drafted'},
       {id:'g1c9',text:'Mandate Next.js scaffold live on Vercel'},
-      {id:'g1c10',text:'All 8 recruiters contacted via Mandate'},
+      {id:'g1c10',text:'Contract signed and start date confirmed at Universal Converting Equipment'},
     ]
   },
   p2:{
@@ -651,6 +667,52 @@ function showPhase(id,tab){
   document.querySelectorAll('.ptab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('phase-'+id).classList.add('active');
   if(tab)tab.classList.add('active');
+}
+
+var ROLE_MAP={
+  'Agent':['First 100 Days','UCE'],
+  'Coach':['First 100 Days','UCE'],
+  'Mentor':['AI Learning'],
+  'Designer':['Brand','Social Media','Website'],
+  'PM':['Brand','Social Media','Website','AI Learning','Legal','Finance','First 100 Days','Commercial'],
+  'Developer':['Mandate','SQDCP','Cockpit','Readiness','Product','Dev setup'],
+  'CFO':['Finance'],
+  'CMO':['Brand','Social Media','Content','Website'],
+  'Legal':['Legal'],
+  'Research':['AI Learning']
+};
+var activeRole=null;
+
+function filterRole(role){
+  if(activeRole===role){clearRoleFilter();return;}
+  activeRole=role;
+  document.querySelectorAll('.role-pill').forEach(function(p){
+    p.classList.toggle('rp-active',p.textContent.indexOf(role)>-1);
+  });
+  var bar=document.getElementById('roleFilterBar');
+  var lbl=document.getElementById('roleFilterLabel');
+  if(bar)bar.classList.add('rfb-on');
+  if(lbl)lbl.textContent='Showing: '+role+' lanes only';
+  applyRoleFilter();
+}
+
+function clearRoleFilter(){
+  activeRole=null;
+  document.querySelectorAll('.role-pill').forEach(function(p){p.classList.remove('rp-active');});
+  var bar=document.getElementById('roleFilterBar');
+  if(bar)bar.classList.remove('rfb-on');
+  document.querySelectorAll('.swim-lane').forEach(function(el){el.classList.remove('lane-hidden');});
+}
+
+function applyRoleFilter(){
+  if(!activeRole)return;
+  var allowed=ROLE_MAP[activeRole]||[];
+  document.querySelectorAll('.swim-lane').forEach(function(el){
+    var nm=el.querySelector('.lane-name');
+    var title=nm?nm.textContent.trim():'';
+    var match=allowed.some(function(a){return title.toLowerCase().indexOf(a.toLowerCase())>-1;});
+    el.classList.toggle('lane-hidden',!match);
+  });
 }
 
 ['now','p1','p2','p3','p4'].forEach(buildPhase);
